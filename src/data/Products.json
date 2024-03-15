@@ -1,29 +1,92 @@
 [
-	{
-		"id": 1,
-		"title": "Producto Prueba",
-		"description": "Este es un producto prueba",
-		"price": 200,
-		"thumbnail": "Sin imagen",
-		"code": "abc123",
-		"stock": 25
-	},
-	{
-		"id": 2,
-		"title": "Producto modificado",
-		"description": "Este es un producto prueba modificado",
-		"price": 2000,
-		"thumbnail": "Sin imagen",
-		"code": "abc1235555",
-		"stock": 2
-	},
-	{
-		"id": 3,
-		"title": "Producto Prueba 3",
-		"description": "Este es un producto prueba 3",
-		"price": 300,
-		"thumbnail": "Sin imagen",
-		"code": "abc12333333",
-		"stock": 5
-	}
+  {
+    "id": 1,
+    "title": "Smartphone Samsung Galaxy S20",
+    "description": "Potente smartphone con pantalla AMOLED de 6.2 pulgadas, cámara de 64 MP y procesador Exynos 990.",
+    "price": 799.99,
+    "thumbnail": "Sin imagen",
+    "code": "samsungs20",
+    "stock": 50
+  },
+  {
+    "id": 2,
+    "title": "Laptop Dell XPS 13",
+    "description": "Laptop ultradelgada con pantalla InfinityEdge de 13.3 pulgadas, procesador Intel Core i7 de 10ª generación y 16GB de RAM.",
+    "price": 1399.99,
+    "thumbnail": "Sin imagen",
+    "code": "dellxps13",
+    "stock": 30
+  },
+  {
+    "id": 3,
+    "title": "Tablet Apple iPad Pro",
+    "description": "Potente tablet con pantalla Liquid Retina de 11 pulgadas, chip A12Z Bionic y compatibilidad con Magic Keyboard y Apple Pencil.",
+    "price": 799.99,
+    "thumbnail": "Sin imagen",
+    "code": "ipadpro11",
+    "stock": 40
+  },
+  {
+    "id": 4,
+    "title": "Auriculares Sony WH-1000XM4",
+    "description": "Auriculares inalámbricos con cancelación de ruido líder en la industria, sonido de alta resolución y hasta 30 horas de duración de la batería.",
+    "price": 349.99,
+    "thumbnail": "Sin imagen",
+    "code": "sonywh1000xm4",
+    "stock": 20
+  },
+  {
+    "id": 5,
+    "title": "Smartwatch Apple Watch Series 6",
+    "description": "Smartwatch con pantalla Always-On Retina, monitor de oxígeno en sangre, seguimiento avanzado de actividad y chip S6 SiP.",
+    "price": 399.99,
+    "thumbnail": "Sin imagen",
+    "code": "applewatch6",
+    "stock": 35
+  },
+  {
+    "id": 6,
+    "title": "Cámara Canon EOS R5",
+    "description": "Cámara mirrorless de alta resolución con sensor CMOS de 45MP, grabación de video 8K y sistema AF Dual Pixel CMOS II.",
+    "price": 3899.99,
+    "thumbnail": "Sin imagen",
+    "code": "canoneosr5",
+    "stock": 15
+  },
+  {
+    "id": 7,
+    "title": "Monitor LG UltraGear 27GN950-B",
+    "description": "Monitor gaming de 27 pulgadas con resolución 4K, frecuencia de actualización de 144Hz y compatibilidad con HDR600.",
+    "price": 1099.99,
+    "thumbnail": "Sin imagen",
+    "code": "lgultragear27",
+    "stock": 25
+  },
+  {
+    "id": 8,
+    "title": "Router ASUS ROG Rapture GT-AX11000",
+    "description": "Router gaming con Wi-Fi 6 de triple banda, 10 puertos gigabit, tecnología AiProtection Pro y aceleración de juegos WTFast.",
+    "price": 449.99,
+    "thumbnail": "Sin imagen",
+    "code": "asusroggtax11000",
+    "stock": 10
+  },
+  {
+    "id": 9,
+    "title": "Teclado mecánico Corsair K95 RGB Platinum",
+    "description": "Teclado mecánico gaming con interruptores Cherry MX Speed, retroiluminación RGB personalizable y reposamuñecas desmontable.",
+    "price": 199.99,
+    "thumbnail": "Sin imagen",
+    "code": "corsairk95rgb",
+    "stock": 20
+  },
+  {
+    "id": 10,
+    "title": "Impresora Epson EcoTank ET-4760",
+    "description": "Impresora multifunción con sistema de tanques de tinta rellenables, impresión sin cartuchos y conectividad Wi-Fi.",
+    "price": 499.99,
+    "thumbnail": "Sin imagen",
+    "code": "epsonecotank4760",
+    "stock": 30
+  }
 ]

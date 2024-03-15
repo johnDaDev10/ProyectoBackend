@@ -1,60 +1,56 @@
 import ProductManager from './managers/ProductManager.js'
-import { Express } from 'express'
+import express from 'express'
+
+const PORT = 8080
+
 //Se creará una instancia de la clase “ProductManager”
 const manager = new ProductManager('./src/data/Products.json')
+const app = express()
 
-//Testing:
-// const testing = async () => {
-//   try {
-//     Se llamará “getProducts” recién creada la instancia, debe devolver un arreglo vacío []
-//     console.log(await manager.getProducts())
+app.get('/products', async (req, res) => {
+  const products = await manager.getProducts()
+  const { limit } = req.query
+  console.log(+limit)
+  if (!limit) {
+    return res.status(200).send({
+      message: `All produdcts found`,
+      data: products,
+    })
+  }
+  if (+limit > products.length || isNaN(limit) || +limit === 0) {
+    return res.status(200).send({
+      error:
+        +limit > products.length || +limit === 0
+          ? `Not enough products found`
+          : `'${limit}' --> Invalid Data`,
+    })
+  }
+  const limitProducts = products.slice(0, +limit)
+  return res.status(200).send({
+    message: `These are the ${limit} products found`,
+    data: limitProducts,
+  })
+})
 
-//     Se llamará al método “addProduct” con los campos:
-//     title: “producto prueba”
-//     description:”Este es un producto prueba”
-//     price:200,
-//     thumbnail:”Sin imagen”
-//     code:”abc123”,
-//     stock:25
+app.get('/products/:pid', async (req, res) => {
+  const products = await manager.getProducts()
+  const { pid } = req.params
+  console.log(pid)
+  const product = await manager.getProductById(+pid)
+  if (!product) {
+    return res.status(200).send({
+      error:
+        +pid > products.length
+          ? `The product with ID: ${pid} does'nt exist`
+          : `'${pid}' --> Invalid Data`,
+    })
+  }
+  return res.status(200).send({
+    message: `Product found with id ${pid}`,
+    data: product,
+  })
+})
 
-//     const newProduct = {
-//       title: 'Producto Prueba',
-//       description: 'Este es un producto prueba',
-//       price: 200,
-//       thumbnail: 'Sin imagen',
-//       code: 'abc123',
-//       stock: 25,
-//     }
-//     await manager.addProduct(newProduct)
-
-//     Se llamará el método “getProducts” nuevamente, esta vez debe aparecer el producto recién agregado
-//     console.log(await manager.getProducts())
-
-//     Se llamará al método “getProductById” y se corroborará que devuelva el producto con el id especificado, en caso de no existir, debe arrojar un error.
-//     console.log(await manager.getProductById(1)) //Si existe el id 1
-//     console.log(await manager.getProductById(6)) //No existe el id 6 por el momento --> Undefined
-
-//     Se llamará al método “updateProduct” y se intentará cambiar un campo de algún producto, se evaluará que no se elimine el id y que sí se haya hecho la actualización.
-
-//     Undefined --> no existe el id 10
-//     console.log(
-//       await manager.updateProduct(10, {
-//         title: 'Producto modificado',
-//         description: 'Este es un producto prueba modificado',
-//       })
-//     )
-
-//     console.log(
-//       await manager.updateProduct(2, {
-//         title: 'Producto modificado',
-//         description: 'Este es un producto prueba modificado',
-//       })
-//     )
-
-//     console.log(await manager.deleteProduct(4))
-//   } catch (error) {
-//     console.log(`Error desde el testing de index.js ${error}`)
-//   }
-// }
-
-// testing()
+app.listen(PORT, () => {
+  console.log(`Listening on PORT => ${PORT}`)
+})
