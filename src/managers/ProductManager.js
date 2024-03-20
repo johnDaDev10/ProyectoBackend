@@ -40,17 +40,32 @@ class ProductManager {
     - Al agregarlo, debe crearse con un id autoincrementable
   */
   async addProduct(product) {
+    // Verificar si product.status está definido
+    if (product.status === undefined) {
+      // Si no está definido, establecerlo en true por defecto
+      product.status = true
+    }
+    if (product.thumbnail === undefined) {
+      // Si no está definido, establecerlo en true por defecto
+      product.thumbnail = 'no image'
+    }
+
     if (
+      product.id ||
       !(
         product.title &&
         product.description &&
         product.price &&
-        product.thumbnail &&
         product.code &&
-        product.stock
+        product.stock &&
+        product.category
       )
     ) {
-      console.log('Incomplete data')
+      console.log(
+        product.id
+          ? 'The id can`t be sent'
+          : 'Error, Bad Request, Check The Data'
+      )
       return
     }
     try {
