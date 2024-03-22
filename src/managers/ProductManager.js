@@ -117,9 +117,23 @@ class ProductManager {
   }
 
   async updateProduct(idProduct, newProperties) {
-    if (newProperties.id) {
+    if (
+      newProperties.id ||
+      !(
+        newProperties.title ||
+        newProperties.description ||
+        newProperties.price ||
+        newProperties.code ||
+        newProperties.stock ||
+        newProperties.category ||
+        newProperties.status ||
+        newProperties.thumbnail
+      )
+    ) {
       console.log(
-        'Error desde updateProduct, En las nuevas propiedades se envió un ID'
+        newProperties.id
+          ? 'The id can`t be sent'
+          : 'Error, Bad Request, Check The Data'
       )
       return
     }
@@ -138,6 +152,7 @@ class ProductManager {
         return updateProduct
       } else {
         console.log('No se pudo actualizar')
+        return
       }
     } catch (error) {
       console.log(`Error desde updateProduct ${error}`)
@@ -158,6 +173,7 @@ class ProductManager {
         return findProduct
       } else {
         console.log('No se pudo eliminar')
+        return
       }
     } catch (error) {
       console.log(`Catch Error desde deleteProduct ${error}`)

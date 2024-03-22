@@ -9,8 +9,7 @@ const productManager = new ProductManager(
 // Route -> /api/products/...
 const router = Router()
 
-router.get('/products', async (req, res) => {
-  const products = await productManager.getProducts()
+router.get('/', async (req, res) => {
   const { limit } = req.query
   console.log(+limit)
   if (!limit) {
@@ -19,38 +18,56 @@ router.get('/products', async (req, res) => {
       data: products,
     })
   }
-  if (+limit > products.length || isNaN(limit) || +limit === 0) {
-    return res.status(400).send({
-      error:
-        +limit > products.length || +limit === 0
-          ? `Not enough products found`
-          : `'${limit}' --> Invalid Data`,
+  try {
+    const products = await productManager.getProducts()
+
+    if (+limit > products.length || isNaN(limit) || +limit === 0) {
+      return res.status(400).send({
+        error:
+          +limit > products.length || +limit === 0
+            ? `Not enough products found`
+            : `'${limit}' --> Invalid Data`,
+      })
+    }
+    const limitProducts = products.slice(0, +limit)
+    return res.status(200).send({
+      message: `These are the ${limit} products found`,
+      data: limitProducts,
+    })
+  } catch (error) {
+    console.log('Error desde products Router get(/):', error)
+    return res.status(500).json({
+      message: 'Internal Server Error',
+      error: error.message,
     })
   }
-  const limitProducts = products.slice(0, +limit)
-  return res.status(200).send({
-    message: `These are the ${limit} products found`,
-    data: limitProducts,
-  })
 })
 
-router.get('/products/:pid', async (req, res) => {
-  const products = await productManager.getProducts()
-  const { pid } = req.params
-  console.log(pid)
-  const product = await productManager.getProductById(+pid)
-  if (!product) {
-    return res.status(400).send({
-      error:
-        +pid > products.length
-          ? `The product with ID: ${pid} does'nt exist`
-          : `'${pid}' --> Invalid Data`,
+router.get('/:pid', async (req, res) => {
+  try {
+    const products = await productManager.getProducts()
+    const { pid } = req.params
+    console.log(pid)
+    const product = await productManager.getProductById(+pid)
+    if (!product) {
+      return res.status(400).send({
+        error:
+          +pid > products.length
+            ? `The product with ID: ${pid} does'nt exist`
+            : `'${pid}' --> Invalid Data`,
+      })
+    }
+    return res.status(200).send({
+      message: `Product found with id ${pid}`,
+      data: product,
+    })
+  } catch (error) {
+    console.log('Error desde products Router get(/:pid):', error)
+    return res.status(500).json({
+      message: 'Internal Server Error',
+      error: error.message,
     })
   }
-  return res.status(200).send({
-    message: `Product found with id ${pid}`,
-    data: product,
-  })
 })
 
 router.post('/', async (req, res) => {
@@ -69,7 +86,7 @@ router.post('/', async (req, res) => {
       data: newProduct,
     })
   } catch (error) {
-    console.error('Error desde products Router post(/):', error)
+    console.log('Error desde products Router post(/):', error)
     return res.status(500).json({
       message: 'Internal Server Error',
       error: error.message,
@@ -77,4 +94,51 @@ router.post('/', async (req, res) => {
   }
 })
 
+router.put('/:pid', async (req, res) => {
+  const { pid } = req.params
+  const newProperties = req.body
+  try {
+    const updatedProduct = await productManager.updateProduct(
+      +pid,
+      newProperties
+    )
+    if (!updatedProduct || isNaN(pid) || +pid === 0) {
+      return res.status(400).send({
+        error:
+          !isNaN(pid) || +pid === 0
+            ? `Not enough products found`
+            : `'${pid}' --> Invalid Data`,
+      })
+    }
+    return res.status(200).send({
+      message: `Product successfully updated with id ${pid}`,
+      data: updatedProduct,
+    })
+  } catch (error) {
+    console.error('Error desde products Router put(/:pid):', error)
+    return res.status(500).json({
+      message: 'Internal Server Error',
+      error: error.message,
+    })
+  }
+})
+
+router.delete('/:pid', async (req, res) => {
+  const { pid } = req.params
+  try {
+    const deletedProduct = await productManager.deleteProduct(+pid)
+    if (!deletedProduct || isNaN(pid) || +pid === 0) {
+      return res.status(400).send({
+        error:
+          !isNaN(pid) || +pid === 0
+            ? `Not enough products found`
+            : `'${pid}' --> Invalid Data`,
+      })
+    }
+    return res.status(200).send({
+      message: `Product successfully deleted with id ${pid}`,
+      data: deletedProduct,
+    })
+  } catch (error) {}
+})
 export default router
