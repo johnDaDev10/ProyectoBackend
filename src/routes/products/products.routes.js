@@ -11,16 +11,16 @@ const router = Router()
 
 router.get('/', async (req, res) => {
   const { limit } = req.query
-  console.log(+limit)
-  if (!limit) {
-    return res.status(200).send({
-      message: `All produdcts found`,
-      data: products,
-    })
-  }
+  // console.log(+limit === 0)
   try {
     const products = await productManager.getProducts()
 
+    if (!limit) {
+      return res.status(200).send({
+        message: `All produdcts found`,
+        data: products,
+      })
+    }
     if (+limit > products.length || isNaN(limit) || +limit === 0) {
       return res.status(400).send({
         error:
@@ -29,6 +29,7 @@ router.get('/', async (req, res) => {
             : `'${limit}' --> Invalid Data`,
       })
     }
+
     const limitProducts = products.slice(0, +limit)
     return res.status(200).send({
       message: `These are the ${limit} products found`,
@@ -139,6 +140,12 @@ router.delete('/:pid', async (req, res) => {
       message: `Product successfully deleted with id ${pid}`,
       data: deletedProduct,
     })
-  } catch (error) {}
+  } catch (error) {
+    console.error('Error desde products Router delete(/:pid):', error)
+    return res.status(500).json({
+      message: 'Internal Server Error',
+      error: error.message,
+    })
+  }
 })
 export default router

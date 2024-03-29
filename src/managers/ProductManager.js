@@ -40,34 +40,44 @@ class ProductManager {
     - Al agregarlo, debe crearse con un id autoincrementable
   */
   async addProduct(product) {
-    // Verificar si product.status está definido
-    if (product.status === undefined) {
-      // Si no está definido, establecerlo en true por defecto
-      product.status = true
-    }
-    if (product.thumbnail === undefined) {
-      // Si no está definido, establecerlo en true por defecto
-      product.thumbnail = 'no image'
-    }
+    const attributes = [
+      'title',
+      'description',
+      'price',
+      'code',
+      'stock',
+      'category',
+      'status',
+      'thumbnail',
+    ]
 
-    if (
-      product.id ||
-      !(
-        product.title &&
-        product.description &&
-        product.price &&
-        product.code &&
-        product.stock &&
-        product.category
-      )
-    ) {
+    product.status = typeof product.status === 'boolean' ? product.status : true
+    product.thumbnail = product.thumbnail ?? 'no image'
+    const missingAttributes = attributes.filter(
+      (attribute) => !(attribute in product)
+    )
+    if (missingAttributes.length > 0) {
       console.log(
         product.id
           ? 'The id can`t be sent'
-          : 'Error, Bad Request, Check The Data'
+          : `Error, Bad Request, Check The Data ( Missing ${missingAttributes} Attributes)`
       )
       return
     }
+    const extraAttributes = Object.keys(product).filter(
+      (attribute) => !attributes.includes(attribute)
+    )
+    if (extraAttributes.length > 0) {
+      console.log(
+        product.id
+          ? 'The id can`t be sent'
+          : `Error, Bad Request, Check The Data ( Extra Attributes => ${extraAttributes})`
+      )
+      return
+    }
+
+    console.log(product)
+
     try {
       const products = await this.getProducts()
       const codeSearch = products.some((prod) => prod.code === product.code)
@@ -117,31 +127,44 @@ class ProductManager {
   }
 
   async updateProduct(idProduct, newProperties) {
-    if (
-      newProperties.id ||
-      !(
-        newProperties.title ||
-        newProperties.description ||
-        newProperties.price ||
-        newProperties.code ||
-        newProperties.stock ||
-        newProperties.category ||
-        newProperties.status ||
-        newProperties.thumbnail
-      )
-    ) {
+    const attributes = [
+      'title',
+      'description',
+      'price',
+      'code',
+      'stock',
+      'category',
+      'status',
+      'thumbnail',
+    ]
+    const extraAttributes = Object.keys(newProperties).filter(
+      (attribute) => !attributes.includes(attribute)
+    )
+
+    console.log(extraAttributes)
+    if (extraAttributes.length > 0) {
       console.log(
         newProperties.id
           ? 'The id can`t be sent'
-          : 'Error, Bad Request, Check The Data'
+          : `Error, Bad Request, Check The Data ( Extra Attributes => ${extraAttributes})`
       )
       return
     }
+
     try {
       const products = await this.getProducts()
       const foundProduct = await this.getProductById(idProduct)
 
       if (foundProduct) {
+        const codeSearch = products.some(
+          (product) => product.code === newProperties.code
+        )
+        if (codeSearch) {
+          console.log(
+            `Error, the code entered already exists ( Code => ${newProperties.code})`
+          )
+          return
+        }
         const updateProduct = { ...foundProduct, ...newProperties }
 
         const replaceProducts = products.map((product) => {
@@ -169,7 +192,7 @@ class ProductManager {
         )
         products.splice(findIndexProduct, 1)
         await this.writeFile(products)
-        console.log(`Producto Eliminado -->`)
+        console.log(`Producto Eliminado`)
         return findProduct
       } else {
         console.log('No se pudo eliminar')
