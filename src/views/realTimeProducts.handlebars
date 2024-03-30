@@ -1,0 +1,102 @@
+<h1 class="text-center mb-4">{{this.title}}</h1>
+<form class="row g-3 mx-4" id="formProduct">
+
+ 
+    <div class="col-md-6">
+        <label for="title" class="form-label">Product name</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-box"></i></span>
+            <input class="form-control" type="text" name="title" id="title" placeholder="Ex. Smartphone 51s+" required>
+        </div>
+    </div>
+
+  
+    <div class="col-md-6">
+        <label for="description" class="form-label">Description</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-file-text"></i></span>
+            <input class="form-control" type="text" name="description" id="description" placeholder="Ex. Latest model with advanced features" required>
+        </div>
+    </div>
+
+   
+    <div class="col-md-6">
+        <label for="stock" class="form-label">Stock</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-box"></i></span>
+            <input class="form-control" type="number" name="stock" id="stock" placeholder="Ex. 35" required>
+        </div>
+    </div>
+
+    
+    <div class="col-md-6">
+        <label for="thumbnail" class="form-label">Image (URL)</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-image"></i></span>
+            <input class="form-control" type="text" name="thumbnail" id="thumbnail" placeholder="Ej. https://example.com/image.jpg">
+        </div>
+    </div>
+
+   
+    <div class="col-md-6">
+        <label for="category" class="form-label">Category</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-grid"></i></span>
+            <input class="form-control" type="text" name="category" id="category" placeholder="Ex. Electronics" required>
+        </div>
+    </div>
+
+  
+    <div class="col-md-6">
+        <label for="price" class="form-label">Price</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+            <input class="form-control" type="number" name="price" id="price" placeholder="Ex. 499.99" required>
+        </div>
+    </div>
+
+  
+    <div class="col-md-6">
+        <div class="form-check mt-4">
+            <input name="status" class="form-check-input" type="checkbox" value="true" id="flexCheckChecked" checked>
+            <label class="form-check-label" for="flexCheckChecked">Status</label>
+        </div>
+    </div>
+
+  
+    <div class="col-md-6">
+        <label for="code" class="form-label">Code</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-tag"></i></span>
+            <input class="form-control" type="text" name="code" id="code" placeholder="Ex. Code123" required>
+        </div>
+    </div>
+
+   
+    <div class="col-12 mt-4">
+        <button class="btn btn-primary" type="submit" id="add-btn">Register product </button>
+    </div>
+
+    <h2 class="mt-4">Delete Product:</h2>
+
+  
+    <div class="col-md-6">
+        <label for="id-prod" class="form-label">Product ID</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-trash"></i></span>
+            <input class="form-control" type="number" name="id-prod" id="id-prod" placeholder="Ex. 123">
+        </div>
+    </div>
+
+    <div class="col-12 mt-4">
+        <button class="btn btn-danger" type="button" id="delete-btn">Delete</button>
+    </div>
+</form>
+
+<div class="row mt-4" id="list-products">
+
+</div>
+       
+       
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/socketServerProducts.js"></script>

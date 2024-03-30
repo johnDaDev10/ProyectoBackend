@@ -1,0 +1,36 @@
+body {
+    background-color: #b3d2b1; 
+}
+h1 {
+    color: #2c7873;
+    font-size: 80px;
+}
+h2 {
+    color: #2c7873;
+    font-size: 50px;
+}
+.card {
+    border: none;
+    border-radius: 15px;
+    transition: transform 0.3s;
+    background: linear-gradient(135deg, #004445, #6FB98F); 
+    color: #fff; 
+}
+
+.card-header {
+    background-color: #021C1E; 
+    color: #fff; 
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.addCard {
+    color: #004445;
+    font-size: 18px;
+}
+.addCard:hover {
+    font-size: 30px;
+  
+}
