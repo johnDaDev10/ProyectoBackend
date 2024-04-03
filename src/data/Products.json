@@ -133,13 +133,13 @@
   },
   {
     "id": 13,
-    "title": "Smartphone Samsung Galaxy S20",
-    "description": "Potente smartphone con pantalla AMOLED de 6.2 pulgadas, cámara de 64 MP y procesador Exynos 990.",
-    "price": 799.99,
-    "thumbnail": "Sin imagen",
-    "code": "prueba",
-    "stock": 50,
-    "status": true,
-    "category": "Electronicos"
+    "title": "aasd",
+    "description": "asd",
+    "stock": "2",
+    "thumbnail": "asd",
+    "category": "asd",
+    "price": "23",
+    "code": "sd3",
+    "status": true
   }
 ]

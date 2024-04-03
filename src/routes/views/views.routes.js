@@ -18,11 +18,10 @@ router.get('/', async (req, res) => {
 
 router.get('/realtimeproducts', async (req, res) => {
   const products = await productsManager.getProducts()
-  const data = {
+
+  res.render('realTimeProducts', {
     title: 'Productos desde views router real time products',
-    list: products,
-  }
-  res.render('realTimeProducts', data)
+  })
 })
 
 export default router

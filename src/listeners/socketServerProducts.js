@@ -8,18 +8,24 @@ const productManager = new ProductManager(
 const socketServerProducts = (socketServer) => {
   socketServer.on('connection', async (socket) => {
     console.log('cliente conectado', socket.id)
+
+    const products = await productManager.getProducts()
+    socketServer.emit('sendProducts', products)
+
     socket.on('disconnect', () => {
       console.log('Cliente desconectado', socket.id)
     })
+
     socket.on('addProduct', async (newProduct) => {
-      const prod = await productManager.addProduct(newProduct)
-      socketServer.emit('addProductTable', prod)
+      const product = await productManager.addProduct(newProduct)
+      const products = await productManager.getProducts()
+      socketServer.emit('sendProducts', products)
     })
 
-    socket.on('deleteProduct', async (content) => {
-      await productManager.deleteProduct(+content)
+    socket.on('deleteProduct', async (pid) => {
+      await productManager.deleteProduct(+pid)
       const products = await productManager.getProducts()
-      socketServer.emit('newArrProducts', products)
+      socketServer.emit('sendProducts', products)
     })
   })
 }

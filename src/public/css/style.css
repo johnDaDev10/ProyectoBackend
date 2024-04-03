@@ -34,3 +34,19 @@ h2 {
     font-size: 30px;
   
 }
+
+#add-btn {
+    font-weight: bold;
+    background-color: #004445;
+    color: #6FB98F;
+}
+
+.icons {
+    background-color: #004445;
+    color: #6FB98F;
+}
+
+label {
+    color: black;
+    font-weight:bolder;
+}

@@ -1,86 +1,63 @@
 const socketClient = io()
 
-const frmProduct = document.getElementById('frmProducts')
-const title = document.getElementById('title')
-const description = document.getElementById('description')
-const code = document.getElementById('code')
-const thumbnail = document.getElementById('thumbnail')
-const price = document.getElementById('price')
-const stock = document.getElementById('stock')
-const category = document.getElementById('category')
-const allProductsTable = document.getElementById('allProductsTable')
-const getId = document.getElementById('getId')
-const product = document.getElementById('product')
-const frmColProduct = document.getElementById('frmColProduct')
+socketClient.on('sendProducts', (productsList) => {
+  updateProductList(productsList)
+})
 
-frmProduct.onsubmit = (e) => {
-  const newProduct = {
-    title: title.value,
-    description: description.value,
-    code: code.value,
-    thumbnail: thumbnail.value,
-    price: +price.value,
-    stock: +stock.value,
-    category: category.value,
-  }
-  socketClient.emit('postProduct', newProduct)
+function updateProductList(products) {
+  const productsHdbs = document.getElementById('productList')
+  // console.log(productsHdbs)
+  let productsToList = ''
+
+  products.forEach((product) => {
+    productsToList += `
+    <tr>
+                                                
+    <td><i class="bi bi-info-circle"></i> ${product.id}</td>
+    <td><i class="bi bi-braces"></i> ${product.title}</td>
+    <td><i class="bi bi-file-text"></i> ${product.description}</td>
+    <td><i class="bi bi-tag"></i> ${product.code}</td>
+    <td><i class="bi bi-currency-dollar"></i> ${product.price}</td>
+    <td><i class="bi bi-check-circle"></i> ${product.status}</td>
+    <td><i class="bi bi-box"></i> ${product.stock}</td>
+    <td><i class="bi bi-grid"></i> ${product.category}</td>
+    <td><i class="bi bi-image"></i> ${product.thumbnail}</td>
+    <td><button class="btn btn-danger" type="button" id="btnDelete" onclick='deleteProduct(${product.id})'><i class="bi bi-trash"></button></i></td>
+
+    </tr>
+    `
+  })
+  productsHdbs.innerHTML = productsToList
+}
+
+const getForm = document.getElementById('formProduct')
+
+getForm.addEventListener('submit', (e) => {
   e.preventDefault()
-  // document.getElementById('frmProducts').reset()
-}
 
-socketClient.on('postProductTable', async (prod) => {
-  const newRow = `
-        <tr id="product">
-        <!--Columna-->
-                <td>${prod.id}</td>
-                <td>${prod.title}</td>
-                <td>${prod.description}</td>
-                <td>$ ${prod.price}</td>
-                <td>${prod.thumbnail || 'thumbnail not found'}</td>
-                <td>${prod.code}</td>
-                <td>${prod.stock}</td>                        
-                <td>${prod.category}</td>   
-                <td><button id="delete">DELETE</button></td>
-        </tr>
-        `
-
-  allProductsTable.innerHTML += newRow
-})
-
-document.getElementById('allProductsTable').onclick = (e) => {
-  console.log('BOTON ESTRIPADO')
-  const target = e.target
-  const parentElement = target.parentElement.parentElement
-  // console.log(parentElement);
-  // console.log(target);
-  // console.log(parentElement.children[0].innerHTML);
-  // console.log(target.id === "delete");
-  if (target.id === 'delete') {
-    target.parentElement.parentElement.remove()
-    e.preventDefault()
-    socketClient.emit('deleteProduct', parentElement.children[0].innerHTML)
+  const newProduct = {
+    title: getForm.elements.title.value,
+    description: getForm.elements.description.value,
+    stock: getForm.elements.stock.value,
+    thumbnail: getForm.elements.thumbnail.value,
+    category: getForm.elements.category.value,
+    price: getForm.elements.price.value,
+    code: getForm.elements.code.value,
+    status: getForm.elements.status.checked,
   }
-}
 
-socketClient.on('newArrProducts', async (products) => {
-  const newRow = products
-    .map((prod) => {
-      return `
-        <tr id="product">
-        <!--Columna-->
-                <td>${prod.id}</td>
-                <td>${prod.title}</td>
-                <td>${prod.description}</td>
-                <td>$ ${prod.price}</td>
-                <td>${prod.thumbnail || 'thumbnail not found'}</td>
-                <td>${prod.code}</td>
-                <td>${prod.stock}</td>                        
-                <td>${prod.category}</td>   
-                <td><button id="delete">DELETE</button></td>
-        </tr>
-        `
-    })
-    .join(' ')
+  socketClient.emit('addProduct', newProduct)
 
-  allProductsTable.innerHTML = newRow
+  getForm.reset()
 })
+
+document.getElementById('btnDelete').addEventListener('click', () => {
+  const productIdHdbs = document.getElementById('productId')
+  socketClient.emit('deleteProduct', +productIdHdbs.value)
+  // console.log(productIdHdbs, +productIdHdbs.value)
+  productIdHdbs.value = ''
+})
+
+function deleteProduct(pid) {
+  socketClient.emit('deleteProduct', pid)
+}
