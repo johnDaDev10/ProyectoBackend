@@ -3,7 +3,7 @@ import { Server } from 'socket.io'
 import handlebars from 'express-handlebars'
 import apiRoutes from './routes/app.routes.js'
 import { __dirname } from './util/utils.js'
-import socketServerProducts from './listeners/socketServerProducts.js'
+import socketServerListener from './listeners/socketServer.listener.js'
 
 const PORT = 8080
 
@@ -30,7 +30,7 @@ const httpServer = app.listen(PORT, () => {
     console.log(`\t2). http://localhost:${PORT}/api/carts/:cid`)
     console.log(`\t3) - Render Home Products. http://localhost:${PORT}/`)
     console.log(
-      `\t4) - Render real Time Products. http://localhost:${PORT}/realTimeProducts`
+      `\t4) - Render Real Time Products. http://localhost:${PORT}/realTimeProducts`
     )
   } catch (error) {
     console.log(`Error from app.js ${error}`)
@@ -39,4 +39,4 @@ const httpServer = app.listen(PORT, () => {
 
 const socketServer = new Server(httpServer)
 
-socketServerProducts(socketServer)
+socketServerListener(socketServer)

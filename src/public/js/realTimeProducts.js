@@ -1,4 +1,4 @@
-const socketClient = io()
+const socketClient = io() // Connecting to Backend socket server
 
 socketClient.on('sendProducts', (productsList) => {
   updateProductList(productsList)
@@ -29,6 +29,34 @@ function updateProductList(products) {
   })
   productsHdbs.innerHTML = productsToList
 }
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 5000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  },
+})
+
+let user
+Swal.fire({
+  title: 'Identify yourself',
+  input: 'text',
+  text: 'Enter your username to log in to the Ecommerce',
+  inputValidator: (value) => {
+    return !value && 'You must type a username to continue!'
+  },
+  allowOutsideClick: false,
+  allowEscapeKey: false,
+  padding: '16px',
+}).then((result) => {
+  user = result.value
+  socketClient.emit('login', user)
+})
 
 const getForm = document.getElementById('formProduct')
 

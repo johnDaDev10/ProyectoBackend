@@ -5,15 +5,19 @@ const productManager = new ProductManager(
   __dirname + '../../data/Products.json'
 )
 
-const socketServerProducts = (socketServer) => {
+const socketServerListener = (socketServer) => {
   socketServer.on('connection', async (socket) => {
-    console.log('cliente conectado', socket.id)
+    console.log('New client connected!', socket.id)
+    socket.on('login', (user) => {
+      socket.emit('welcome', user)
+      socket.broadcast.emit('newUser', user)
+    })
 
     const products = await productManager.getProducts()
     socketServer.emit('sendProducts', products)
 
     socket.on('disconnect', () => {
-      console.log('Cliente desconectado', socket.id)
+      console.log('Client Disconnected', socket.id)
     })
 
     socket.on('addProduct', async (newProduct) => {
@@ -30,4 +34,4 @@ const socketServerProducts = (socketServer) => {
   })
 }
 
-export default socketServerProducts
+export default socketServerListener

@@ -130,16 +130,5 @@
     "category": "Electronicos",
     "status": true,
     "thumbnail": "no image"
-  },
-  {
-    "id": 13,
-    "title": "aasd",
-    "description": "asd",
-    "stock": "2",
-    "thumbnail": "asd",
-    "category": "asd",
-    "price": "23",
-    "code": "sd3",
-    "status": true
   }
 ]
