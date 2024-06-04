@@ -1,13 +1,14 @@
 import { Router } from 'express'
 import { __dirname } from '../../util/utils.js'
-import ProductManager from '../../managers/ProductManager.js'
+import ProductManager from '../../dao/managers/fileSystemManager/ProductManagerFS.js'
 
-const router = Router()
 const productsManager = new ProductManager(
   __dirname + '../../data/Products.json'
 )
 
-router.get('/', async (req, res) => {
+const viewsRouter = Router()
+
+viewsRouter.get('/', async (req, res) => {
   const products = await productsManager.getProducts()
   const data = {
     title: 'Productos desde views router',
@@ -16,7 +17,7 @@ router.get('/', async (req, res) => {
   res.render('home', data)
 })
 
-router.get('/realtimeproducts', async (req, res) => {
+viewsRouter.get('/realtimeproducts', async (req, res) => {
   const products = await productsManager.getProducts()
 
   res.render('realTimeProducts', {
@@ -24,4 +25,4 @@ router.get('/realtimeproducts', async (req, res) => {
   })
 })
 
-export default router
+export default viewsRouter

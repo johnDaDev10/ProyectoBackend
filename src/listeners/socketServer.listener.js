@@ -1,4 +1,4 @@
-import ProductManager from '../managers/ProductManager.js'
+import ProductManager from '../dao/managers/fileSystemManager/ProductManagerFS.js'
 import { __dirname } from '../util/utils.js'
 
 const productManager = new ProductManager(

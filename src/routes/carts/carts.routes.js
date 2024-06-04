@@ -1,19 +1,19 @@
 import { Router } from 'express'
 import { __dirname } from '../../util/utils.js'
-import ProductManager from '../../managers/ProductManager.js'
-import CartManager from '../../managers/CartManager.js'
+import ProductManager from '../../dao/managers/fileSystemManager/ProductManagerFS.js'
+import CartManager from '../../dao/managers/fileSystemManager/CartManagerFS.js'
 
 const productManager = new ProductManager(
   __dirname + '../../data/Products.json'
 )
 const cartManager = new CartManager(__dirname + '../../data/Carts.json')
 
-const router = Router()
+const cartsRouter = Router()
 
-router.get('/:cid', async (req, res) => {
+cartsRouter.get('/:cid', async (req, res) => {
   const { cid } = req.params
   try {
-    const getCartId = await cartManager.getCartById(+cid)
+    const getCartId = await cartManager.getCartById(+cid) //no es necesario el populate por el .pre('findOne) del schema
     if (!getCartId) {
       return res.status(400).json({
         error: `Bad Request, Cart with id ${cid} not Found`,
@@ -32,7 +32,7 @@ router.get('/:cid', async (req, res) => {
   }
 })
 
-router.post('/:cid/product/:pid', async (req, res) => {
+cartsRouter.post('/:cid/product/:pid', async (req, res) => {
   try {
     const { cid, pid } = req.params
     const cart = await cartManager.getCartById(+cid)
@@ -61,7 +61,7 @@ router.post('/:cid/product/:pid', async (req, res) => {
   }
 })
 
-router.post('/', async (req, res) => {
+cartsRouter.post('/', async (req, res) => {
   try {
     const ifBodyValues = JSON.stringify(req.body)
     // console.log(ifBodyValues)
@@ -86,4 +86,4 @@ router.post('/', async (req, res) => {
   }
 })
 
-export default router
+export default cartsRouter

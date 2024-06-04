@@ -4,6 +4,7 @@ import handlebars from 'express-handlebars'
 import apiRoutes from './routes/app.routes.js'
 import { __dirname } from './util/utils.js'
 import socketServerListener from './listeners/socketServer.listener.js'
+import './config/dbConfig.js'
 
 const PORT = 8080
 
