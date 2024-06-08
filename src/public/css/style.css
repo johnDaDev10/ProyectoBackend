@@ -1,6 +1,48 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
 body {
     background-color: #b3d2b1; 
 }
+nav {
+    background-color: #2c7873;
+    padding: 0 20px;
+  }
+
+.nav-wrapper {
+display: flex;
+align-items: center;
+justify-content: space-between;
+height: 60px;
+}
+.brand-logo {
+    font-size: 1.5em;
+    color: #ecf0f1;
+    text-decoration: none;
+    font-weight: bold;
+  }
+#nav-mobile {
+list-style: none;
+display: flex;
+margin-bottom: 0;
+}
+#nav-mobile li {
+    margin-left: 20px;
+}
+
+#nav-mobile a {
+    color: #ecf0f1;
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+#nav-mobile a:hover {
+color: #004445;
+}
+
 h1 {
     color: #2c7873;
     font-size: 80px;
@@ -9,6 +51,27 @@ h2 {
     color: #2c7873;
     font-size: 50px;
 }
+
+.colorHeaderProducts {
+    color:#004445;
+}
+
+.nombreUsuarioProducts{
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}
+.nombreUsuarioProducts{
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.containerMain {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
 .card {
     border: none;
     border-radius: 15px;

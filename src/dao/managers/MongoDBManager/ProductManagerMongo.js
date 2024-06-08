@@ -7,7 +7,7 @@ class ProductManager {
   */
   async getProducts() {
     try {
-      const products = await ProductModel.find()
+      const products = await ProductModel.find().lean()
       return {
         code: 200,
         status: true,
@@ -26,20 +26,21 @@ class ProductManager {
 
   async limitProducts(limit) {
     try {
-      const products = await this.getProducts()
-      if (+limit > products.data.length || +limit <= 0 || isNaN(limit)) {
+      // const products = await this.getProducts()
+      const documents = await ProductModel.countDocuments()
+      if (+limit > documents || +limit <= 0 || isNaN(limit)) {
         return {
           code: 400,
           status: false,
           message:
-            +limit > products.data.length || +limit === 0
+            +limit > documents || +limit === 0
               ? `Not enough products found`
               : `'${limit}' --> Invalid Data`,
           data: [],
         }
       }
-
-      const limitProducts = products.data.slice(0, limit)
+      const limitProducts = await ProductModel.find().limit(limit)
+      // const limitProducts = products.data.slice(0, limit)
       return {
         code: 200,
         status: true,
@@ -47,7 +48,12 @@ class ProductManager {
         data: limitProducts,
       }
     } catch (error) {
-      console.log(`Catch Error from getProducts ${error}`)
+      return {
+        code: 400,
+        status: false,
+        message: `Validation Error`,
+        data: error.message,
+      }
     }
   }
 
@@ -57,50 +63,6 @@ class ProductManager {
     - Al agregarlo, debe crearse con un id autoincrementable
   */
   async addProduct(product) {
-    // const attributes = [
-    //   'title',
-    //   'description',
-    //   'price',
-    //   'code',
-    //   'stock',
-    //   'category',
-    //   'status',
-    //   'thumbnail',
-    // ]
-
-    // product.status = typeof product.status === 'boolean' ? product.status : true
-    // product.thumbnail = product.thumbnail ?? 'no image'
-    // const missingAttributes = attributes.filter(
-    //   (attribute) => !(attribute in product)
-    // )
-    // if (missingAttributes.length > 0) {
-    //   return {
-    //     code: 400,
-    //     status: false,
-    //     message:
-    //       product.id || product._id
-    //         ? 'Error, The id can`t be sent'
-    //         : `Error, Bad Request, Wrong Data ( Missing ${missingAttributes} Attributes)`,
-    //     data: [],
-    //   }
-    // }
-    // const extraAttributes = Object.keys(product).filter(
-    //   (attribute) => !attributes.includes(attribute)
-    // )
-    // if (extraAttributes.length > 0) {
-    //   return {
-    //     code: 400,
-    //     status: false,
-    //     message:
-    //       product.id || product._id
-    //         ? 'The id can`t be sent'
-    //         : `Error, Bad Request, Wrong Data ( Extra Attributes => ${extraAttributes})`,
-    //     data: [],
-    //   }
-    // }
-
-    // console.log(product)
-
     try {
       const codeSearch = await ProductModel.findOne({ code: product.code })
       if (codeSearch) {
@@ -139,7 +101,20 @@ class ProductManager {
   async getProductById(idProduct) {
     try {
       const foundProduct = await ProductModel.findById(idProduct)
-      return foundProduct
+      if (!foundProduct) {
+        return {
+          code: 404,
+          status: false,
+          message: `Product with id ${idProduct} does'nt exist`,
+          data: [],
+        }
+      }
+      return {
+        code: 200,
+        status: true,
+        message: `Product found with id ${idProduct}`,
+        data: foundProduct,
+      }
     } catch (error) {
       return {
         code: 400,
@@ -151,36 +126,29 @@ class ProductManager {
   }
 
   async updateProduct(idProduct, newProperties) {
-    // const attributes = [
-    //   'title',
-    //   'description',
-    //   'price',
-    //   'code',
-    //   'stock',
-    //   'category',
-    //   'status',
-    //   'thumbnail',
-    // ]
-    // const extraAttributes = Object.keys(newProperties).filter(
-    //   (attribute) => !attributes.includes(attribute)
-    // )
-
-    // console.log(extraAttributes)
-    // if (extraAttributes.length > 0) {
-    //   console.log(
-    //     newProperties.id
-    //       ? 'The id can`t be sent'
-    //       : `Error, Bad Request, Check The Data ( Extra Attributes => ${extraAttributes})`
-    //   )
-    //   return
-    // }
-
     try {
-      const updateProduct = await ProductModel.updateOne(
-        { _id: idProduct },
-        { ...newProperties }
+      // const updateProduct = await ProductModel.updateOne(
+      //   { _id: idProduct },
+      //   { ...newProperties }
+      // )
+      const updateProduct = await ProductModel.findByIdAndUpdate(
+        idProduct,
+        newProperties
       )
-      return updateProduct
+      if (!updateProduct) {
+        return {
+          code: 404,
+          status: false,
+          message: `Error, Wrong Data, Product with id ${idProduct} does'nt exist`,
+          data: [],
+        }
+      }
+      return {
+        code: 201,
+        status: true,
+        message: `Product successfully updated with id ${idProduct}`,
+        data: (await this.getProductById(idProduct)).data,
+      }
     } catch (error) {
       return {
         code: 400,
@@ -193,22 +161,36 @@ class ProductManager {
 
   async deleteProduct(idProduct) {
     try {
-      const products = await this.getProducts()
-      const findProduct = await this.getProductById(idProduct)
-      if (findProduct) {
-        const findIndexProduct = products.findIndex(
-          (product) => product.id === findProduct.id
-        )
-        products.splice(findIndexProduct, 1)
-        await this.writeFile(products)
-        console.log(`Producto Eliminado`)
-        return findProduct
-      } else {
-        console.log('No se pudo eliminar')
-        return
+      const deleteProduct = await ProductModel.findByIdAndDelete(idProduct)
+      if (!deleteProduct) {
+        return {
+          code: 404,
+          status: false,
+          message: `Error, Wrong Data, Product with id ${idProduct} does'nt exist`,
+          data: [],
+        }
+      }
+      return {
+        code: 200,
+        status: true,
+        message: `Product successfully deleted with id ${idProduct}`,
+        data: deleteProduct,
       }
     } catch (error) {
-      console.log(`Catch Error desde deleteProduct ${error}`)
+      return {
+        code: 400,
+        status: false,
+        message: `Validation Error`,
+        data: error.message,
+      }
+    }
+  }
+  catch(error) {
+    return {
+      code: 400,
+      status: false,
+      message: `Validation Error`,
+      data: error.message,
     }
   }
 }

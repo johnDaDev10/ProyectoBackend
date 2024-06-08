@@ -33,6 +33,7 @@ const httpServer = app.listen(PORT, () => {
     console.log(
       `\t4) - Render Real Time Products. http://localhost:${PORT}/realTimeProducts`
     )
+    console.log(`\t5) - Render Real Time Chat. http://localhost:${PORT}/chat`)
   } catch (error) {
     console.log(`Error from app.js ${error}`)
   }

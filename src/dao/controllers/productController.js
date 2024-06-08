@@ -15,9 +15,10 @@ export const productsList = async (req, res) => {
     }
 
     const limitProducts = await productManager.limitProducts(limit)
-    return res
-      .status(limitProducts.code)
-      .send({ message: limitProducts.message, data: limitProducts.data })
+    return res.status(limitProducts.code).send({
+      message: limitProducts.message,
+      data: limitProducts.data,
+    })
   } catch (error) {
     console.log('Error desde products Router get(/):', error)
     return res.status(500).json({
@@ -70,20 +71,21 @@ export const updateOneProduct = async (req, res) => {
   const newProperties = req.body
   try {
     const updatedProduct = await productManager.updateProduct(
-      +pid,
+      pid,
       newProperties
     )
-    if (!updatedProduct || isNaN(pid) || +pid === 0) {
-      return res.status(400).send({
-        error:
-          !isNaN(pid) || +pid === 0
-            ? `Not enough products found`
-            : `'${pid}' --> Invalid Data`,
-      })
-    }
-    return res.status(200).send({
-      message: `Product successfully updated with id ${pid}`,
-      data: updatedProduct,
+    console.log(updatedProduct)
+    // if (!updatedProduct || isNaN(pid) || +pid === 0) {
+    //   return res.status(400).send({
+    //     error:
+    //       !isNaN(pid) || +pid === 0
+    //         ? `Not enough products found`
+    //         : `'${pid}' --> Invalid Data`,
+    //   })
+    // }
+    return res.status(updatedProduct.code).send({
+      message: updatedProduct.message,
+      data: updatedProduct.data,
     })
   } catch (error) {
     console.error('Error desde products Router put(/:pid):', error)
@@ -97,18 +99,18 @@ export const updateOneProduct = async (req, res) => {
 export const deleteOneProduct = async (req, res) => {
   const { pid } = req.params
   try {
-    const deletedProduct = await productManager.deleteProduct(+pid)
-    if (!deletedProduct || isNaN(pid) || +pid === 0) {
-      return res.status(400).send({
-        error:
-          !isNaN(pid) || +pid === 0
-            ? `Not enough products found`
-            : `'${pid}' --> Invalid Data`,
-      })
-    }
-    return res.status(200).send({
-      message: `Product successfully deleted with id ${pid}`,
-      data: deletedProduct,
+    const deletedProduct = await productManager.deleteProduct(pid)
+    // if (!deletedProduct || isNaN(pid) || +pid === 0) {
+    //   return res.status(400).send({
+    //     error:
+    //       !isNaN(pid) || +pid === 0
+    //         ? `Not enough products found`
+    //         : `'${pid}' --> Invalid Data`,
+    //   })
+    // }
+    return res.status(deletedProduct.code).send({
+      message: deletedProduct.message,
+      data: deletedProduct.data,
     })
   } catch (error) {
     console.error('Error desde products Router delete(/:pid):', error)
