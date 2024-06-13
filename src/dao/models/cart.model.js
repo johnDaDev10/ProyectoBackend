@@ -21,10 +21,9 @@ const cartSchema = new mongoose.Schema({
     default: [],
   },
 })
-
-// cartSchema.pre('findOne', function (next) {
-//   this.populate('products.product') //probar products.product si no funciona
-//   next()
-// })
+cartSchema.pre('findOne', function (next) {
+  this.populate('products.product', '_id title price')
+  next()
+})
 
 export const CartModel = mongoose.model(cartCollection, cartSchema)

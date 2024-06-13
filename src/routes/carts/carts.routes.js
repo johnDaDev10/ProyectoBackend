@@ -11,6 +11,7 @@ import {
   addProductToCart,
   cartsList,
   createNewCart,
+  deleteProductToCart,
   productsInCart,
 } from '../../dao/controllers/cartController.js'
 
@@ -23,5 +24,13 @@ cartsRouter.get('/:cid', productsInCart)
 cartsRouter.post('/:cid/product/:pid', addProductToCart)
 
 cartsRouter.post('/', createNewCart)
+
+cartsRouter.delete('/:cid/product/:pid', deleteProductToCart)
+
+cartsRouter.delete('/:cid')
+
+cartsRouter.put('/:cid')
+
+cartsRouter.put('/:cid/product/:pid')
 
 export default cartsRouter

@@ -22,24 +22,15 @@ export const productsInCart = async (req, res) => {
 export const addProductToCart = async (req, res) => {
   try {
     const { cid, pid } = req.params
-    // console.log(cid, pid)
-    const { quantity } = req.body
-    // const cart = await cartManager.getCartById(+cid)
-    // const product = await productManager.getProductById(+pid)
 
-    // if (!cart || !product) {
-    //   return res.status(400).json({
-    //     message: !cart
-    //       ? `Bad Request, Cart with id ${cid} not Found`
-    //       : `Bad Request, Product with id ${pid} not Found`,
-    //   })
-    // }
+    const quantity = req.body.quantity || 1
 
-    const AddProductToCart = await cartManager.addProduct(cid, pid, quantity)
+    // console.log(quantity)
+    const addProductToCart = await cartManager.addProduct(cid, pid, quantity)
 
-    res.status(AddProductToCart.code).json({
-      message: AddProductToCart.message,
-      data: AddProductToCart.data,
+    res.status(addProductToCart.code).json({
+      message: addProductToCart.message,
+      data: addProductToCart.data,
     })
   } catch (error) {
     console.log('Error desde carts Router post(/:cid/product/:pid):', error)
@@ -75,6 +66,25 @@ export const cartsList = async (req, res) => {
     })
   } catch (error) {
     console.log('Error desde Carts Router get(/:cid):', error)
+    return res.status(500).json({
+      message: 'Internal Server Error',
+      error: error.message,
+    })
+  }
+}
+
+export const deleteProductToCart = async (req, res) => {
+  try {
+    const { cid, pid } = req.params
+
+    const deleteProduct = await cartManager.deleteProductCart(cid, pid)
+
+    res.status(deleteProduct.code).json({
+      message: deleteProduct.message,
+      data: deleteProduct.data,
+    })
+  } catch (error) {
+    console.log('Error desde carts Router delete(/:cid/product/:pid):', error)
     return res.status(500).json({
       message: 'Internal Server Error',
       error: error.message,

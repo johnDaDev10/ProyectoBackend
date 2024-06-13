@@ -3,21 +3,25 @@ import ProductManager from '../managers/MongoDBManager/ProductManagerMongo.js'
 const productManager = new ProductManager()
 
 export const productsList = async (req, res) => {
-  const { limit } = req.query
-  try {
-    const products = await productManager.getProducts()
-    console.log(limit ?? 'limit empty')
-    if (!limit) {
-      return res.status(products.code).send({
-        message: products.message,
-        data: products.data,
-      })
-    }
+  const { limit = 10, page = 1, sort, ...query } = req.query
 
-    const limitProducts = await productManager.limitProducts(limit)
-    return res.status(limitProducts.code).send({
-      message: limitProducts.message,
-      data: limitProducts.data,
+  try {
+    const baseUrl = `${req.protocol}://${req.get('host')}${req.baseUrl}${
+      req.path
+    }`
+    // console.log(baseUrl)
+    const products = await productManager.getProductsPaginate(
+      limit,
+      page,
+      sort,
+      query,
+      baseUrl
+    )
+    // console.log(limit, page, sort, query, baseUrl)
+
+    return res.status(products.code).send({
+      message: products.message,
+      data: products.data,
     })
   } catch (error) {
     console.log('Error desde products Router get(/):', error)

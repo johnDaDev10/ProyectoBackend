@@ -24,6 +24,70 @@ class ProductManager {
     }
   }
 
+  async getProductsPaginate(limit, page, sort, query, baseUrl) {
+    // console.log(limit, page, sort, query, baseUrl)
+    const options = {
+      limit: parseInt(limit, 10),
+      page: parseInt(page, 10),
+      lean: true,
+    }
+
+    if (sort) {
+      if (sort === 'asc' || sort === 'desc') {
+        options.sort = { price: sort === 'asc' ? 1 : -1 }
+      }
+    }
+
+    if (query) {
+      if (query.status === 'true' || query.status === 'false') {
+        query.status = query === 'true'
+      }
+      if (query.price) {
+        const isNumberPrice = +query.price
+        if (!isNaN(isNumberPrice)) {
+          query.price = { $gte: isNumberPrice }
+        }
+      }
+    }
+
+    try {
+      const result = await ProductModel.paginate(query, options)
+
+      const queryString = encodeURIComponent(JSON.stringify(query))
+      // const decodedQuery = JSON.parse(decodeURIComponent(queryString))
+      // console.log(decodedQuery)
+      return {
+        code: 200,
+        status: true,
+        message: `Products successfully found`,
+        data: {
+          count: result.totalDocs,
+          limit: result.limit,
+          payload: result.docs,
+          totalPages: result.totalPages,
+          prevPage: result.prevPage,
+          nextPage: result.nextPage,
+          page: result.page,
+          hasPrevPage: result.hasPrevPage,
+          hasNextPage: result.hasNextPage,
+          prevLink: result.hasPrevPage
+            ? `${baseUrl}?page=${result.prevPage}&limit=${result.limit}&sort=${sort}&${queryString}`
+            : null,
+          nextLink: result.hasNextPage
+            ? `${baseUrl}?page=${result.nextPage}&limit=${result.limit}&sort=${sort}&${queryString}`
+            : null,
+        },
+      }
+    } catch (error) {
+      return {
+        code: 400,
+        status: false,
+        message: `Validation error`,
+        data: error.message,
+      }
+    }
+  }
+
   async limitProducts(limit) {
     try {
       // const products = await this.getProducts()
