@@ -1,0 +1,70 @@
+<div class="container mt-5">
+  <h1 class="text-center mb-4">{{this.title}}</h1>
+
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+    {{#each payload}}
+    <div class="col mb-4">
+      <a
+        href="product/{{this._id}}"
+        class="text-decoration-none text-dark"
+      >
+        <div class="card h-100 bg-light">
+          <div class="card-header  text-white">
+            <i class="bi bi-tag"></i> Code: {{this.code}}
+          </div>
+          <div class="card-body">
+            <h5 class="card-title text-white">{{this.title}}</h5>
+            <ul class="list-unstyled">
+
+
+
+
+
+              <li><i class="bi bi-box"></i> Stock: {{this.stock}}</li>
+              <li>
+                <i class="bi bi-image"></i> Image: <img
+                  src="{{this.thumbnail}}"
+                  alt="{{this.title}}"
+                  class="img-fluid mt-2"
+                >
+              </li>
+            </ul>
+
+
+          </div>
+          {{!-- <a href="/api/carts/{{this.idCart}}/product/{{this.idProduct}}"> Esto para cuando se le vaya a dar
+            funcion al boton de agregar al carrito --}}
+            <button
+              type="button"
+              class="addCard btn btn-success position-absolute top-0 end-0"
+            ><i class="bi bi-cart-plus"></i></button>
+            {{!-- </a> --}}
+        </div>
+      </a>
+    </div>
+    {{/each}}
+  </div>
+  <div class='container text-center containerButtonsPages'>
+    <div class='buttonsPages'>
+
+      {{#if totalPages}}
+      <h4 class='buttonsPages__h4'>Página {{page}} de {{totalPages}}</h4>
+      {{#if prevLink}}
+      <a
+        type="button"
+        class="btn btn-pages"
+        href={{prevLink}}
+      >Página anterior</a>
+
+      {{/if}}
+      {{#if nextLink}}
+      <a
+        type="button"
+        class="btn btn-pages"
+        href={{nextLink}}
+      >Página siguiente</a>
+      {{/if}}
+      {{/if}}
+    </div>
+  </div>
+</div>

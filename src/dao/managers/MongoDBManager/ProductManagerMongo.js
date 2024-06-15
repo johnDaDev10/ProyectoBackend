@@ -1,5 +1,4 @@
 import { ProductModel } from '../../models/product.model.js'
-
 class ProductManager {
   /* 
         getProducts
@@ -24,8 +23,9 @@ class ProductManager {
     }
   }
 
-  async getProductsPaginate(limit, page, sort, query, baseUrl) {
-    // console.log(limit, page, sort, query, baseUrl)
+  async getProductsPaginate(objQuery, baseUrl) {
+    const { limit = 10, page = 1, sort, ...query } = objQuery
+
     const options = {
       limit: parseInt(limit, 10),
       page: parseInt(page, 10),
@@ -37,10 +37,15 @@ class ProductManager {
         options.sort = { price: sort === 'asc' ? 1 : -1 }
       }
     }
+    const queryParameters = { sort, ...query }
+    const queryString = Object.entries(queryParameters)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&')
 
-    if (query) {
+    if (Object.keys(query).length) {
+      // console.log('entré')
       if (query.status === 'true' || query.status === 'false') {
-        query.status = query === 'true'
+        query.status = query.status === 'true'
       }
       if (query.price) {
         const isNumberPrice = +query.price
@@ -49,13 +54,12 @@ class ProductManager {
         }
       }
     }
-
+    // console.log(sort, query)
+    // console.log(queryString)
+    // console.log(query, options)
     try {
       const result = await ProductModel.paginate(query, options)
 
-      const queryString = encodeURIComponent(JSON.stringify(query))
-      // const decodedQuery = JSON.parse(decodeURIComponent(queryString))
-      // console.log(decodedQuery)
       return {
         code: 200,
         status: true,
@@ -71,10 +75,10 @@ class ProductManager {
           hasPrevPage: result.hasPrevPage,
           hasNextPage: result.hasNextPage,
           prevLink: result.hasPrevPage
-            ? `${baseUrl}?page=${result.prevPage}&limit=${result.limit}&sort=${sort}&${queryString}`
+            ? `${baseUrl}?page=${result.prevPage}&limit=${limit}&${queryString}`
             : null,
           nextLink: result.hasNextPage
-            ? `${baseUrl}?page=${result.nextPage}&limit=${result.limit}&sort=${sort}&${queryString}`
+            ? `${baseUrl}?page=${result.nextPage}&limit=${limit}&${queryString}`
             : null,
         },
       }
@@ -83,7 +87,7 @@ class ProductManager {
         code: 400,
         status: false,
         message: `Validation error`,
-        data: error.message,
+        data: error,
       }
     }
   }
@@ -164,7 +168,7 @@ class ProductManager {
 
   async getProductById(idProduct) {
     try {
-      const foundProduct = await ProductModel.findById(idProduct)
+      const foundProduct = await ProductModel.findById(idProduct).lean()
       if (!foundProduct) {
         return {
           code: 404,

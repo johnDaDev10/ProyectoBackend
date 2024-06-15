@@ -5,8 +5,8 @@ import viewsRouter from './views/views.routes.js'
 
 const router = Router()
 
+router.use('/', viewsRouter)
 router.use('/products', productsRouter)
 router.use('/carts', cartsRouter)
-router.use('/', viewsRouter)
 
 export default router

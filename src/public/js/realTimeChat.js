@@ -36,7 +36,7 @@ const Toast = Swal.mixin({
 })
 
 let user = localStorage.getItem('username') // Obtener el nombre de usuario de localStorage
-let timeRemoveInMinuts = 2
+let timeRemoveInMinuts = 1
 
 if (!user) {
   Swal.fire({

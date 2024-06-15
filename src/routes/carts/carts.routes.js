@@ -11,8 +11,11 @@ import {
   addProductToCart,
   cartsList,
   createNewCart,
+  deleteAllProductsInCart,
   deleteProductToCart,
   productsInCart,
+  updateProductsCart,
+  updateQuantityProductCart,
 } from '../../dao/controllers/cartController.js'
 
 const cartsRouter = Router()
@@ -27,10 +30,10 @@ cartsRouter.post('/', createNewCart)
 
 cartsRouter.delete('/:cid/product/:pid', deleteProductToCart)
 
-cartsRouter.delete('/:cid')
+cartsRouter.put('/:cid', updateProductsCart)
 
-cartsRouter.put('/:cid')
+cartsRouter.put('/:cid/product/:pid', updateQuantityProductCart)
 
-cartsRouter.put('/:cid/product/:pid')
+cartsRouter.delete('/:cid', deleteAllProductsInCart)
 
 export default cartsRouter

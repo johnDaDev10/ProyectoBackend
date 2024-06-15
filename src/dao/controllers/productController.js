@@ -3,18 +3,13 @@ import ProductManager from '../managers/MongoDBManager/ProductManagerMongo.js'
 const productManager = new ProductManager()
 
 export const productsList = async (req, res) => {
-  const { limit = 10, page = 1, sort, ...query } = req.query
-
   try {
     const baseUrl = `${req.protocol}://${req.get('host')}${req.baseUrl}${
       req.path
     }`
     // console.log(baseUrl)
     const products = await productManager.getProductsPaginate(
-      limit,
-      page,
-      sort,
-      query,
+      req.query,
       baseUrl
     )
     // console.log(limit, page, sort, query, baseUrl)

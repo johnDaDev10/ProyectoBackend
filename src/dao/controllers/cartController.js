@@ -23,7 +23,7 @@ export const addProductToCart = async (req, res) => {
   try {
     const { cid, pid } = req.params
 
-    const quantity = req.body.quantity || 1
+    const { quantity } = req.body || 1
 
     // console.log(quantity)
     const addProductToCart = await cartManager.addProduct(cid, pid, quantity)
@@ -85,6 +85,70 @@ export const deleteProductToCart = async (req, res) => {
     })
   } catch (error) {
     console.log('Error desde carts Router delete(/:cid/product/:pid):', error)
+    return res.status(500).json({
+      message: 'Internal Server Error',
+      error: error.message,
+    })
+  }
+}
+
+export const updateProductsCart = async (req, res) => {
+  try {
+    const { cid } = req.params
+
+    const { products } = req.body
+
+    // console.log(quantity)
+    const updatedCart = await cartManager.updateCart(cid, products)
+
+    res.status(updatedCart.code).json({
+      message: updatedCart.message,
+      data: updatedCart.data,
+    })
+  } catch (error) {
+    console.log('Error desde carts Router post(/:cid/product/:pid):', error)
+    return res.status(500).json({
+      message: 'Internal Server Error',
+      error: error.message,
+    })
+  }
+}
+
+export const updateQuantityProductCart = async (req, res) => {
+  try {
+    const { cid, pid } = req.params
+    const { quantity } = req.body
+
+    // console.log(quantity)
+    const updatedCart = await cartManager.updateQuantityProduct(
+      cid,
+      pid,
+      quantity
+    )
+
+    res.status(updatedCart.code).json({
+      message: updatedCart.message,
+      data: updatedCart.data,
+    })
+  } catch (error) {
+    console.log('Error desde carts Router post(/:cid/product/:pid):', error)
+    return res.status(500).json({
+      message: 'Internal Server Error',
+      error: error.message,
+    })
+  }
+}
+
+export const deleteAllProductsInCart = async (req, res) => {
+  const { cid } = req.params
+  try {
+    const getCartId = await cartManager.deleteAllProducts(cid) //no es necesario el populate por el .pre('findOne) del schema
+    res.status(getCartId.code).json({
+      message: getCartId.message,
+      data: getCartId.data,
+    })
+  } catch (error) {
+    console.log('Error desde Carts Router get(/:cid):', error)
     return res.status(500).json({
       message: 'Internal Server Error',
       error: error.message,

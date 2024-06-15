@@ -1,0 +1,62 @@
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <link
+    rel="stylesheet"
+    href="/css/bootstrap.min.css"
+  >
+  <link
+    rel="stylesheet"
+    href="/css/chat.css"
+  >
+  <link
+    rel="stylesheet"
+    href="/css/style.css"
+  >
+  <title>Información Carrito </title>
+</head>
+
+<div class="container mt-5 ">
+  <h2 class="text-center mb-4">{{this.title}}</h2>
+  <h2 class="text-center mb-4">{{this.message}}</h2>
+  {{#unless data.products}}
+  <h1 class="text-center mb-4">{{this.data}}</h1>
+  {{/unless }}
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+    {{#each data.products}}
+    <div class="col mb-4">
+      <div class="card h-100 bg-light">
+        <div class="card-header  text-white">
+          <i class="bi bi-tag"></i> Code: {{product.code}}
+        </div>
+        <div class="card-body">
+          <h5 class="card-title text-white">{{product.title}}</h5>
+          <ul class="list-unstyled">
+            <li><i class="bi bi-info-circle"></i> ID: {{product._id}}</li>
+            <li><i class="bi bi-file-text"></i> Description: {{product.description}}</li>
+            <li><i class="bi bi-currency-dollar"></i> Price: ${{product.price}}</li>
+
+
+            <li><i class="bi bi-box"></i> Quantity: {{this.quantity}}</li>
+            <li>
+              <i class="bi bi-image"></i> Image: <img
+                src="{{product.thumbnail}}"
+                alt="{{product.thumbnail}}"
+                class="img-fluid mt-2"
+              >
+            </li>
+          </ul>
+
+
+        </div>
+
+      </div>
+
+
+    </div>
+    {{/each}}
+  </div>
+</div>
