@@ -31,48 +31,46 @@ function updateProductList(products) {
   productsHdbs.innerHTML = productsToList
 }
 
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'top-end',
-  showConfirmButton: false,
-  timer: 4000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer)
-    toast.addEventListener('mouseleave', Swal.resumeTimer)
-  },
-})
+// const Toast = Swal.mixin({
+//   toast: true,
+//   position: 'top-end',
+//   showConfirmButton: false,
+//   timer: 4000,
+//   timerProgressBar: true,
+//   didOpen: (toast) => {
+//     toast.addEventListener('mouseenter', Swal.stopTimer)
+//     toast.addEventListener('mouseleave', Swal.resumeTimer)
+//   },
+// })
+// socketClient.emit('login', user)
 
-let user = localStorage.getItem('username') // Obtener el nombre de usuario de localStorage
-let timeRemoveInMinuts = 2
-
-if (!user) {
-  Swal.fire({
-    title: 'Identify yourself',
-    input: 'text',
-    text: 'Enter your username to log in to the Ecommerce',
-    inputValidator: (value) => {
-      return !value && 'You must type a username to continue!'
-    },
-    allowOutsideClick: false,
-    allowEscapeKey: false,
-    padding: '16px',
-  }).then((result) => {
-    user = result.value
-    localStorage.setItem('username', user)
-    Usuario.innerHTML = `Welcome: ${user}`
-    socketClient.emit('login', user)
-    setTimeout(() => {
-      localStorage.removeItem('username')
-    }, timeRemoveInMinuts * 60 * 1000)
-  })
-} else {
-  Usuario.innerHTML = `User Name: ${user}`
-  socketClient.emit('login', user)
-  setTimeout(() => {
-    localStorage.removeItem('username')
-  }, timeRemoveInMinuts * 60 * 1000)
-}
+// if (!user) {
+//   Swal.fire({
+//     title: 'Identify yourself',
+//     input: 'text',
+//     text: 'Enter your username to log in to the Ecommerce',
+//     inputValidator: (value) => {
+//       return !value && 'You must type a username to continue!'
+//     },
+//     allowOutsideClick: false,
+//     allowEscapeKey: false,
+//     padding: '16px',
+//   }).then((result) => {
+//     user = result.value
+//     localStorage.setItem('username', user)
+//     Usuario.innerHTML = `Welcome: ${user}`
+//     socketClient.emit('login', user)
+//     setTimeout(() => {
+//       localStorage.removeItem('username')
+//     }, timeRemoveInMinuts * 60 * 1000)
+//   })
+// } else {
+//   Usuario.innerHTML = `User Name: ${user}`
+//   socketClient.emit('login', user)
+//   setTimeout(() => {
+//     localStorage.removeItem('username')
+//   }, timeRemoveInMinuts * 60 * 1000)
+// }
 
 const getForm = document.getElementById('formProduct')
 
@@ -106,16 +104,16 @@ function deleteProduct(pid) {
   socketClient.emit('deleteProduct', pid)
 }
 
-socketClient.on('welcome', (user) => {
-  Toast.fire({
-    icon: 'success',
-    title: `Welcome ${user}!`,
-  })
-})
+// socketClient.on('welcome', (user) => {
+//   Toast.fire({
+//     icon: 'success',
+//     title: `Welcome ${user}!`,
+//   })
+// })
 
-socketClient.on('newUser', (user) => {
-  Toast.fire({
-    icon: 'info',
-    title: `${user} is online!`,
-  })
-})
+// socketClient.on('newUser', (user) => {
+//   Toast.fire({
+//     icon: 'info',
+//     title: `${user} is online!`,
+//   })
+// })

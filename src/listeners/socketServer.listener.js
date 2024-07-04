@@ -11,7 +11,7 @@ import MessageManager from '../dao/managers/MongoDBManager/MessageManagerMongo.j
 const productManager = new ProductManager()
 const messageManager = new MessageManager()
 
-const socketServerListener = (socketServer) => {
+export const socketServerListener = (socketServer) => {
   socketServer.on('connection', async (socket) => {
     console.log('New client connected!', socket.id)
 
@@ -73,5 +73,3 @@ const socketServerListener = (socketServer) => {
     })
   })
 }
-
-export default socketServerListener

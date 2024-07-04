@@ -3,7 +3,9 @@ const nombreUsuario = document.getElementById('nombreusuario')
 const formulario = document.getElementById('formulario')
 const inputmensaje = document.getElementById('mensaje')
 const chat = document.getElementById('chat')
+console.log(nombreUsuario.innerHTML)
 
+socketClient.emit('login', nombreUsuario.innerHTML)
 // let usuario = null
 
 // if (!usuario) {
@@ -35,36 +37,25 @@ const Toast = Swal.mixin({
   },
 })
 
-let user = localStorage.getItem('username') // Obtener el nombre de usuario de localStorage
-let timeRemoveInMinuts = 1
+// Swal.fire({
+//   title: 'Identify yourself',
+//   input: 'text',
+//   text: 'Enter your username to log in to the Ecommerce',
+//   inputValidator: (value) => {
+//     return !value && 'You must type a username to continue!'
+//   },
+//   allowOutsideClick: false,
+//   allowEscapeKey: false,
+//   padding: '16px',
+// }).then((result) => {
+//   user = result.value
 
-if (!user) {
-  Swal.fire({
-    title: 'Identify yourself',
-    input: 'text',
-    text: 'Enter your username to log in to the Ecommerce',
-    inputValidator: (value) => {
-      return !value && 'You must type a username to continue!'
-    },
-    allowOutsideClick: false,
-    allowEscapeKey: false,
-    padding: '16px',
-  }).then((result) => {
-    user = result.value
-    localStorage.setItem('username', user) // Guardar el nombre de usuario en localStorage
-    nombreUsuario.innerHTML = user
-    socketClient.emit('login', user)
-    setTimeout(() => {
-      localStorage.removeItem('username')
-    }, timeRemoveInMinuts * 60 * 1000)
-  })
-} else {
-  nombreUsuario.innerHTML = user
-  socketClient.emit('login', user)
-  setTimeout(() => {
-    localStorage.removeItem('username')
-  }, timeRemoveInMinuts * 60 * 1000)
-}
+//   nombreUsuario.innerHTML = user
+//   socketClient.emit('login', user)
+//   setTimeout(() => {
+//     localStorage.removeItem('username')
+//   }, timeRemoveInMinuts * 60 * 1000)
+// })
 
 function scrollToBottom() {
   const chatContainer = document.getElementById('chat-messages')
@@ -74,7 +65,7 @@ function scrollToBottom() {
 formulario.onsubmit = (e) => {
   e.preventDefault()
   const info = {
-    user: user,
+    user: nombreUsuario.innerHTML,
     message: inputmensaje.value,
   }
   console.log(info)

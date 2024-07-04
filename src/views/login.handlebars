@@ -1,0 +1,113 @@
+<head>
+	<meta charset="UTF-8">
+	<meta
+		name="viewport"
+		content="width=device-width, initial-scale=1.0"
+	>
+	<link
+		rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+	>
+	<link
+		rel="stylesheet"
+		href="/css/login.css"
+	>
+	<title>Login</title>
+</head>
+
+
+
+<div
+	class="container"
+	id="container"
+>
+
+	<div class="form-container sign-in-container">
+		<form
+			action="/api/sessions/login"
+			method="POST"
+		>
+			<h1>Sign in</h1>
+			<div class="social-container">
+				<a
+					href="#"
+					class="social"
+				><i class="fab fa-facebook-f"></i></a>
+				<a
+					href="#"
+					class="social"
+				><i class="fab fa-google-plus-g"></i></a>
+				<a
+					href="#"
+					class="social"
+				><i class="fab fa-linkedin-in"></i></a>
+				<a
+					href="#"
+					class="social"
+				><i class="fab fa-github"></i></a>
+
+			</div>
+			<span>or use your account</span>
+			{{#if error}}
+			<script>
+				window.onload = function () {
+					Swal.fire({
+						icon: "error",
+						title: "Oops...",
+						text: "Incorrect email or password, try again",
+						footer: '<a style="color: blue;" href="/register">if you don´t have an account yet, click here.</a>'
+					});
+				}
+			</script>
+
+			{{/if}}
+			<input
+				type="email"
+				name="email"
+				placeholder="Email"
+				required
+			/>
+			<input
+				type="password"
+				name="password"
+				placeholder="Password"
+				required
+			/>
+			<a href="#">Forgot your password?</a>
+			<button type="submit">Sign In</button>
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+
+			<div class="overlay-panel overlay-right">
+				<h1>Hello, Friend!</h1>
+				<p>Enter your personal details and start journey with us</p>
+				<a href="/register"><button
+						class="ghost"
+						id="signUp"
+					>Sign Up</button></a>
+
+			</div>
+		</div>
+	</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{{!-- <footer>
+	<p>
+		Created with <i class="fa fa-heart"></i> by
+		<a
+			target="_blank"
+			href="https://florin-pop.com"
+		>Florin Pop</a>
+		- Read how I created this and how you can join the challenge
+		<a
+			target="_blank"
+			href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/"
+		>here</a>.
+	</p>
+</footer> --}}
+
+{{!--
+<script src="/js/login.js"></script> --}}

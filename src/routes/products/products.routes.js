@@ -11,7 +11,7 @@ import {
   getOneProduct,
   productsList,
   updateOneProduct,
-} from '../../dao/controllers/productController.js'
+} from '../../dao/controllers/products.controller.js'
 
 // Route -> /api/products/...
 const productsRouter = Router()

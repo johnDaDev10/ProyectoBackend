@@ -16,7 +16,7 @@ import {
   productsInCart,
   updateProductsCart,
   updateQuantityProductCart,
-} from '../../dao/controllers/cartController.js'
+} from '../../dao/controllers/carts.controller.js'
 
 const cartsRouter = Router()
 
