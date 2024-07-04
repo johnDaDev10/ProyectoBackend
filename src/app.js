@@ -48,8 +48,8 @@ app.use('/', apiRoutes)
 
 const httpServer = app.listen(PORT, () => {
   try {
-    console.log(`Listening on port ${PORT}\nAcceder a:`)
-    // console.log(`\t1). http://localhost:${PORT}/api/products`)
+    console.log(`Listening on port ${PORT}\nAcceder:`)
+    console.log(`\thttp://localhost:${PORT}/`)
     // console.log(`\t2). http://localhost:${PORT}/api/carts/:cid`)
     // console.log(`\t3) - Render Home Products. http://localhost:${PORT}/`)
     // console.log(
