@@ -32,7 +32,7 @@ app.use(
     store: MongoStore.create({
       mongoUrl:
         'mongodb+srv://johndev10admin:jd7yfGAHIKOjdaDG1R2024lv@e-commercejdlv-cluster.irmfbff.mongodb.net/EcommerceJDLV-DB?retryWrites=true&w=majority&appName=e-commerceJDLV-Cluster',
-      // ttl: 100,
+      ttl: 100,
     }),
   })
 )
