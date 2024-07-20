@@ -6,6 +6,8 @@ import { __dirname } from './util/utils.js'
 import { socketServerListener } from './listeners/socketServer.listener.js'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
+import passport from 'passport'
+import { initializePassport } from './middleware/passport.middleware.js'
 
 import './config/dbConfig.js'
 
@@ -17,12 +19,8 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '../../public'))
-// app.use(checkSession)
-// app.use((req, res, next) => {
-//   res.status(404).render('error404')
-// })
 
-//Session
+//Session Middleware
 app.use(
   session({
     // name: 'start-solo',
@@ -32,10 +30,13 @@ app.use(
     store: MongoStore.create({
       mongoUrl:
         'mongodb+srv://johndev10admin:jd7yfGAHIKOjdaDG1R2024lv@e-commercejdlv-cluster.irmfbff.mongodb.net/EcommerceJDLV-DB?retryWrites=true&w=majority&appName=e-commerceJDLV-Cluster',
-      ttl: 100,
+      ttl: 1000,
     }),
   })
 )
+app.use(passport.initialize())
+app.use(passport.session())
+initializePassport()
 
 // Configuracion Express Handlebars
 app.engine('handlebars', handlebars.engine())
@@ -76,3 +77,10 @@ const httpServer = app.listen(PORT, () => {
 const socketServer = new Server(httpServer)
 
 socketServerListener(socketServer)
+
+// App ID: 937809
+
+// Client ID: Iv23limrdQZfOPjKLHFN
+
+// Cliente Secreto
+// 478cff29127f2b2a5e1f3157d3032822e8f0d0b7

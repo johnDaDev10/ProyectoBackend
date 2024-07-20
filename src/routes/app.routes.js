@@ -12,5 +12,8 @@ router.use('/products', productsRouter)
 router.use('/carts', cartsRouter)
 router.use('/sessions', sessionRouter)
 router.use('/users', usersRouter)
+router.use('*', async (req, res) => {
+  return res.status(404).render('error404')
+})
 
 export default router
