@@ -1,5 +1,6 @@
 import { UserModel } from '../models/user.model.js'
 import { hashPassword } from '../../util/hashbcryp.js'
+import jwt from 'jsonwebtoken'
 
 export const userRegister = async (req, res) => {
   const { firstName, lastName, age, email, password } = req.body
@@ -21,7 +22,7 @@ export const userRegister = async (req, res) => {
 
     console.log(role)
     // Crear un nuevo usuario
-    const newUser = await UserModel.create({
+    const jwtUser = await UserModel.create({
       firstName,
       lastName,
       email,
@@ -29,9 +30,16 @@ export const userRegister = async (req, res) => {
       age,
       role,
     })
+    const token = jwt.sign({ user: jwtUser }, 'secretEcommerceJDLV', {
+      expiresIn: '24h',
+    })
 
-    req.session.user = { ...newUser._doc }
-    console.log(req.session)
+    res.cookie('ecommerceCookieToken', token, {
+      maxAge: 60 * 60 * 24 * 1000, //1 hora de vida
+      httpOnly: true, //La cookie solo se puede acceder mediante HTTP
+    })
+    // req.session.user = { ...newUser._doc }
+    // console.log(req.session)
     res.redirect('/viewProducts')
   } catch (error) {
     console.log('Error desde Users Router post(/):', error)

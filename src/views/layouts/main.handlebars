@@ -6,7 +6,7 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   >
-  
+
 </head>
 <body>
 
@@ -29,16 +29,36 @@
         <li><a href="/realTimeProducts">realTimeProducts</a></li>
 
         {{#if user}}
-<li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
             {{user.firstName}} {{user.lastName}}
           </a>
-          <ul class="dropdown-menu" data-bs-theme="dark">
-            <li><a class="dropdown-item" href="/profile">Your profile</a></li>
-            <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><hr class="dropdown-divider"></li>
+          <ul
+            class="dropdown-menu"
+            data-bs-theme="dark"
+          >
+            <li><a
+                class="dropdown-item"
+                href="/profile"
+              >Your profile</a></li>
+            <li><a
+                class="dropdown-item"
+                href="#"
+              >Settings</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
             {{!-- <li><a href="/api/sessions/logout">Logout</a></l> --}}
-            <li><a class="dropdown-item" href="/api/sessions/logout">Sign Out</a></li>
+            <li><a
+                class="dropdown-item"
+                href="/api/sessions/logout"
+              >Sign Out</a></li>
           </ul>
         </li>
         {{else}}

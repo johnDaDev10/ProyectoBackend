@@ -44,7 +44,7 @@ export const addProductToCart = async (req, res) => {
 export const createNewCart = async (req, res) => {
   try {
     const newCart = await cartManager.addCart()
-    res.status(newCart.code).json({
+    return res.status(newCart.code).json({
       message: newCart.message,
       data: newCart.data,
     })

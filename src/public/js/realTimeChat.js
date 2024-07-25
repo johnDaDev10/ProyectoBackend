@@ -68,7 +68,7 @@ formulario.onsubmit = (e) => {
     user: nombreUsuario.innerHTML,
     message: inputmensaje.value,
   }
-  console.log(info)
+  // console.log(info)
   socketClient.emit('mensaje', info)
   inputmensaje.value = ' '
   scrollToBottom()

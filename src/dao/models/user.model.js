@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { cartCollection } from './cart.model.js'
 
 export const userCollection = 'users'
 
@@ -20,15 +21,22 @@ const userSchema = new mongoose.Schema({
     unique: true,
   },
 
+  age: {
+    type: Number,
+    required: true,
+  },
+
+  cart: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: cartCollection,
+    required: true,
+  },
+
   password: {
     type: String,
     required: true,
   },
 
-  age: {
-    type: Number,
-    required: true,
-  },
   role: {
     type: String,
     enum: ['admin', 'user'],

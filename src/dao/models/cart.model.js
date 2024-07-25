@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { productCollection } from './product.model.js'
 
-const cartCollection = 'carts'
+export const cartCollection = 'carts'
 
 const cartSchema = new mongoose.Schema({
   products: {

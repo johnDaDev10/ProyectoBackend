@@ -1,13 +1,14 @@
 import express from 'express'
-import { Server } from 'socket.io'
+import cookieParser from 'cookie-parser'
 import handlebars from 'express-handlebars'
+import passport from 'passport'
+import initializePassport from './middleware/passport.middleware.js'
+import { Server } from 'socket.io'
 import apiRoutes from './routes/app.routes.js'
 import { __dirname } from './util/utils.js'
 import { socketServerListener } from './listeners/socketServer.listener.js'
-import session from 'express-session'
-import MongoStore from 'connect-mongo'
-import passport from 'passport'
-import { initializePassport } from './middleware/passport.middleware.js'
+// import session from 'express-session'
+// import MongoStore from 'connect-mongo'
 
 import './config/dbConfig.js'
 
@@ -19,24 +20,25 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '../../public'))
+app.use(cookieParser())
+app.use(passport.initialize())
+// app.use(passport.session())
+initializePassport()
 
 //Session Middleware
-app.use(
-  session({
-    // name: 'start-solo',
-    secret: 'secretEcommerceCoder',
-    resave: true,
-    saveUninitialized: true,
-    store: MongoStore.create({
-      mongoUrl:
-        'mongodb+srv://johndev10admin:jd7yfGAHIKOjdaDG1R2024lv@e-commercejdlv-cluster.irmfbff.mongodb.net/EcommerceJDLV-DB?retryWrites=true&w=majority&appName=e-commerceJDLV-Cluster',
-      ttl: 1000,
-    }),
-  })
-)
-app.use(passport.initialize())
-app.use(passport.session())
-initializePassport()
+// app.use(
+//   session({
+//     // name: 'start-solo',
+//     secret: 'secretEcommerceCoder',
+//     resave: true,
+//     saveUninitialized: true,
+//     store: MongoStore.create({
+//       mongoUrl:
+//         'mongodb+srv://johndev10admin:jd7yfGAHIKOjdaDG1R2024lv@e-commercejdlv-cluster.irmfbff.mongodb.net/EcommerceJDLV-DB?retryWrites=true&w=majority&appName=e-commerceJDLV-Cluster',
+//       ttl: 1000,
+//     }),
+//   })
+// )
 
 // Configuracion Express Handlebars
 app.engine('handlebars', handlebars.engine())

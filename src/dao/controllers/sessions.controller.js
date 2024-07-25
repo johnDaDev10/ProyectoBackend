@@ -1,5 +1,6 @@
 import { UserModel } from '../models/user.model.js'
 import { hashPassword, isValidPassword } from '../../util/hashbcryp.js'
+import jwt from 'jsonwebtoken'
 
 export const loginController = async (req, res) => {
   try {
@@ -15,7 +16,7 @@ export const loginController = async (req, res) => {
         .status(400)
         .render('login', { error: 'Wrong email or password' })
     }
-    const sessionUser = {
+    const jwtUser = {
       _id: user._id,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -23,11 +24,19 @@ export const loginController = async (req, res) => {
       email: user.email,
       role: user.role,
     }
-    req.session.user = sessionUser
-    req.session.save((err) => {
-      if (err) console.log('session error => ', err)
-      else res.status(200).redirect('/viewProducts')
+    const token = jwt.sign({ user: jwtUser }, 'secretEcommerceJDLV', {
+      expiresIn: '24h',
     })
+
+    res.cookie('ecommerceCookieToken', token, {
+      maxAge: 60 * 60 * 24 * 1000, //1 hora de vida
+      httpOnly: true, //La cookie solo se puede acceder mediante HTTP
+    })
+    // req.session.user = sessionUser
+    // req.session.save((err) => {
+    //   if (err) console.log('session error => ', err)
+    //   else res.status(200).redirect('/viewProducts')
+    // })
   } catch (error) {
     console.log(error)
   }
@@ -70,12 +79,15 @@ export const loginController = async (req, res) => {
 // }
 
 export const logoutController = (req, res, next) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.log(err)
-    } else {
-      // res.clearCookie('start-solo')
-      res.redirect('/')
-    }
-  })
+  res.clearCookie('ecommerceCookieToken')
+  res.redirect('/')
+
+  // req.session.destroy((err) => {
+  //   if (err) {
+  //     console.log(err)
+  //   } else {
+  //     // res.clearCookie('start-solo')
+  //     res.redirect('/')
+  //   }
+  // })
 }

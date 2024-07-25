@@ -16,7 +16,7 @@ export const socketServerListener = (socketServer) => {
     console.log('New client connected!', socket.id)
 
     socket.on('login', (user) => {
-      console.log(user)
+      // console.log(user)
       socket.emit('welcome', user)
       socket.broadcast.emit('newUser', user)
     })
